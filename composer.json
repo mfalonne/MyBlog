@@ -1,0 +1,17 @@
+{
+    "name": "utilisateur/my-blog",
+    "autoload": {
+        "psr-4": {
+            "Router\\": "routes/",
+             "App\\": "app/",
+             "Database\\": "database/"
+        }
+    },
+    "authors": [
+        {
+            "name": "falonne",
+            "email": "falonne.muyombo@hotmail.fr"
+        }
+    ],
+    "require": {}
+}
