@@ -1,6 +1,6 @@
 <div class="container masthead">
     <h1>Modifier <?= $params['post']->title ?></h1>
-    <form action="./posts/edit/<?= $params['post']->id ?>" method="POST">
+    <form action="./<?= $params['post']->id ?>" method="POST">
         <div class="for-group mb-3">
             <label for="title">Titre de l'article</label>
             <input type="text" class="form-control" name="title" id="title" value="<?= $params['post']->title ?>">

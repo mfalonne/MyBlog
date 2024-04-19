@@ -37,6 +37,8 @@ abstract class Model {
             $i++;
         }
 
+        var_dump($sqlRequestPart); die();
+
         $data['id'] = $id;
 
         return $this->query("UPDATE  {$this->table} SET {$sqlRequestPart} WHERE id = :id", $data);
