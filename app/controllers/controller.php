@@ -3,27 +3,38 @@
 namespace App\controllers;
 
 use Database\DBConnection;
+use Twig\Environment;
 
-abstract class controller {
+abstract class Controller {
 
     protected $db;
+    protected $twig;
 
-    public function __construct(DBConnection $db)
+    public function __construct(DBConnection $db, Environment $twig)
     {
+        if(session_status() === PHP_SESSION_NONE){
+            session_start();
+        }
         $this->db = $db;
+        $this->twig = $twig;
     }
 
-    protected function view(string $path, array $params = null)
+    protected function view(string $path, array $params = [])
     {
-        ob_start();
-        $path = str_replace('.',DIRECTORY_SEPARATOR,$path);
-        require VIEWS.$path.'.php';
-        $content = ob_get_clean();
-        require VIEWS.'layout.php';
+        echo $this->twig->render(str_replace('.', '/', $path) . '.twig', $params);
     }
 
-   protected function getDB()
-   {
-    return $this->db;
-   }
+    protected function getDB()
+    {
+        return $this->db;
+    }
+
+    protected function isAdmin()
+    {
+        if(isset($_SESSION['auth']) && $_SESSION['auth'] === 1) {
+            return true;
+        } else {
+            return header('Location: ./login');
+        }
+    }
 }

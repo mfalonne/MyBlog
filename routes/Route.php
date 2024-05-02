@@ -5,14 +5,13 @@ namespace Router;
 use Database\DBConnection;
 
 class Route {
-
     public $path;
     public $action;
     public $matches;
 
     public function __construct($path, $action)
     {
-        $this->path = trim($path,'/');
+        $this->path = trim($path, '/');
         $this->action = $action;
     }
 
@@ -20,8 +19,7 @@ class Route {
     {
         $path = preg_replace('#:([\w]+)#', '([^/]+)', $this->path);
         $pathToMatch = "#^$path$#i";
-
-         if( preg_match( $pathToMatch,$url,$matches)){
+        if (preg_match($pathToMatch, $url, $matches)) {
             $this->matches = $matches;
             return true;
         } else {
@@ -30,12 +28,25 @@ class Route {
     }
 
     public function execute()
-    {
-        $params = explode('@',$this->action);
-        $controller = new $params[0](new DBConnection(DB_NAME, DB_HOST, DB_USER, DB_PWD));
-        $method = $params[1];
+{
+    global $twig; 
 
-        return isset($this->matches[1])? $controller->$method($this->matches[1]) : $controller->$method();
+    if (is_array($this->action)) {
+        $controllerClass = $this->action[0];
+        $controller = new $controllerClass(new DBConnection(DB_NAME, DB_HOST, DB_USER, DB_PWD), $twig);
+        $method = $this->action[1];
+    } else {
+        $params = explode('@', $this->action);
+        $controllerClass = $params[0];
+        $controller = new $controllerClass(new DBConnection(DB_NAME, DB_HOST, DB_USER, DB_PWD), $twig);
+        $method = $params[1];
     }
 
+    if (!empty($this->matches)) {
+        array_shift($this->matches);  
+        return call_user_func_array([$controller, $method], $this->matches);
+    } else {
+        return $controller->$method();
+    }
+}
 }

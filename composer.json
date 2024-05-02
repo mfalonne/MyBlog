@@ -13,5 +13,8 @@
             "email": "falonne.muyombo@hotmail.fr"
         }
     ],
-    "require": {}
+    "require": {
+        "twig/twig": "3.3",
+        "symfony/routing": "^7.0"
+    }
 }

@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+{% block body %}
+    <div class="container masthead">
+        <h1>{{ post.title ?? 'Créer un nouvel article' }}</h1>
+
+        <form action="{{ post is defined ? '/MyBlog/admin/posts/edit/' ~ post.id : '/MyBlog/admin/posts/create' }}" method="POST">
+            <div class="form-group mb-3">
+                <label for="title">Titre de l'article</label>
+                <input type="text" class="form-control" name="title" id="title" value="{{ post.title ?? '' }}">
+            </div>
+            <div class="form-group mb-3">
+                <label for="content">Contenu de l'article</label>
+                <textarea name="content" id="content" rows="8" class="form-control">{{ post.content ?? '' }}</textarea>
+            </div>
+            <div class="form-group mb-3">
+                <label for="tags">Tags de l'article</label>
+                <select multiple id="tags" class="form-control" name="tags[]">
+                    {% for tag in tags %}
+                        <option value="{{ tag.id }}"
+                            {% if post is defined %}
+                                {% for postTag in post.getTags() %}
+                                    {{ tag.id == postTag.id ? 'selected' }}
+                                {% endfor %}
+                            {% endif %}
+                        >{{ tag.name }}</option>
+                    {% endfor %}   
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">{{ post is defined ? 'Enregistrer les modifications' : 'Enregistrer mon article' }}</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.twig' %}
+
+{% block body %}
+    <div class="container masthead">
+        <img src="" class="img-fluid" alt="image-article-2">
+        <h1>{{ post.title }}</h1>
+        <div>
+            {% for tag in post.getTags() %}
+                <span class="badge text-bg-secondary mb-2">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+        <p>{{ post.content }}</p>
+        <a href="/MyBlog/posts" class="btn btn-primary">Retourner</a>
+    </div>
+{% endblock %}
+
